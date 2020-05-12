@@ -2,23 +2,36 @@
 # de la population  sigma² ou n<30
 
 # données
-x_moy = 0.3
-esp_theo = 0.45
-esti_variance_echan = 0.4
-nb_element = 40
-risque=0.05
+# x_moy = 0.3
+# esp_theo = 0.45
+# esti_variance_echan = 0.4
+# nb_element = 40
+# risque=0.05
+
+# Ajout du fichier DoubleInput.R
+if(!exists("getDoublePrompt", mode="function")) source(here::here('Modules', 'DoubleInput.R'))
+
+stopifnot(interactive())
+
+# read input from user
+x_moy <- getDoublePrompt(prompt="Entrez la moyenne theorique : ")
+esp_theo <- getDoublePrompt(prompt="Entrez l'esperance theorique : ")
+esti_variance_echan <- getDoublePrompt(prompt="Entrez l'estimation de la variance : ")
+nb_element <- getDoublePrompt(prompt="Entrez le nombre d'element : ")
+risque <- getDoublePrompt(prompt="Entrez le risque : (ex 0.05) : ")
+
 
 # RAPPEL: (sigma)ecart type = sqrt(variance)
 
 # suis une loi N(esp_theo,esti_variance_echan²)  
 # calcule de t abs
-ecart = abs(x_moy-esp_theo)
-t_abs = ecart/((esti_variance_echan)/sqrt(nb_element))
+ecart <- abs(x_moy-esp_theo)
+t_abs <- ecart/((esti_variance_echan)/sqrt(nb_element))
 t_abs
-demi_p = pnorm(t_abs, mean = 0, sd = 1, lower.tail = TRUE)
-demi_p = (1-demi_p)
+demi_p <- pnorm(t_abs, mean = 0, sd = 1, lower.tail = TRUE)
+demi_p <- (1-demi_p)
 demi_p
-p = demi_p*2
+p <- demi_p*2
 p
 
 if(p<risque){
@@ -27,10 +40,10 @@ if(p<risque){
   print("p>risque --> On ne peut pas refuser H0") 
 }
 
-var = (1-risque/2)
+var <- (1-risque/2)
 var
 
-t_theo = demi_p = qnorm(var)
+t_theo <- demi_p <- qnorm(var)
 t_theo
 
 if (t_abs<t_theo){
@@ -44,24 +57,24 @@ if (t_abs<t_theo){
 # Rappel: risque = 100% - %confiance
 
 # données
-x_moy = 0.3
-esp_theo = 0.45
-esti_variance_echan = 0.4
-nb_element = 40
-risque=0.05
+x_moy <- 0.3
+esp_theo <- 0.45
+esti_variance_echan <- 0.4
+nb_element <- 40
+risque <- 0.05
 
 # Rappel: 
 # I = [x_moy -t(sigma_chap/sqrt(n));x_moy +t(sigma_chap/sqrt(n))]
 # I = [I0;I1]
 
-sigma_chap = sqrt(nb_element/(nb_element-1))*sqrt(esti_variance_echan)
+sigma_chap <- sqrt(nb_element/(nb_element-1))*sqrt(esti_variance_echan)
 sigma_chap
-t = abs(qnorm(risque/2))
+t <- abs(qnorm(risque/2))
 t
-var= t*(sigma_chap/sqrt(nb_element))
-I0 = esp_theo - var
+var <- t*(sigma_chap/sqrt(nb_element))
+I0 <- esp_theo - var
 I0
-I1 = esp_theo + var
+I1 <- esp_theo + var
 I1
-reponse = paste("intervalle = [",I0,";",I1,"]")
+reponse <- paste("intervalle = [",I0,";",I1,"]")
 reponse
